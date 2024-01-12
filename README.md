@@ -1,128 +1,73 @@
-# TouchEffect was merged into XamarinCommunityToolkit https://github.com/xamarin/XamarinCommunityToolkit/pull/566 I highly recommed to use TouchEffect from XCT
+# Maui.TouchEffect
+Forked from the amazingly popular original TouchEffect Library, this Compat version aims to ease your migration from Xamarin.Forms to .NET MAUI with a compatible implementation to get you up and running without rewriting the parts of your app that relied on the original library.
 
-## TouchEff effect for Xamarin Forms (Repsonisve touches without TapGestureRecognizer)
-This plugin provides opportunity to create views with touch effects without using TapGestureRecognizer. It makes it possible to change the appearance of any control in response to touch events, either directly via xaml or with your custom logic hooked up to the events which this plugin exposes.
+Get it from NuGet:
 
-With this plugin it is also possible to respond to hover events (if the platform exposes them) and to display native touch feedback events (Tilt on UWP, Ripple on Android, Opacity/Color changing on iOS).
+[![Nuget](https://img.shields.io/nuget/v/TouchEffect.Maui.svg)](https://www.nuget.org/packages/TouchEffect.Maui)
 
-### Build Status
-* Azure DevOps: [![Build status](https://dev.azure.com/andreimisiukevich/TouchView/_apis/build/status/TouchView-nuget-CI)](https://dev.azure.com/andreimisiukevich/TouchView/_build/latest?definitionId=1)
+> The aim of this library is to provide temporary support for the touch effect without having to take a dependency on [XCT's MauiCompat](https://devblogs.microsoft.com/xamarin/introducing-net-maui-compatibility-for-the-xamarin-community-toolkit/) library. My results of using the compat library have been extremely tempramental, alot of the times the touch effect does not work and due to the packages target framework (net6) & age (2 years old) I figured a new port would be the best option. When [CommunityToolkit.Maui](https://github.com/CommunityToolkit/Maui) eventually releases this feature I will archive this repository.
 
-## GIF
-<html>
-  <table style="width:100%">
-    <tr>
-      <th>TouchImage</th>
-      <th>Fade / Ripple</th> 
-      <th>Background color / Transformations</th>
-      <th>IsToggled / image</th>
-    </tr>
-    <tr>
-      <td><img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/1.gif?raw=true"></td>
-      <td><img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/2.gif?raw=true"></td>
-      <td><img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/3.gif?raw=true"></td>
-    <td><img src="https://github.com/AndreiMisiukevich/TouchEffect/blob/master/images/4.gif?raw=true"></td>
-    </tr>
-  </table>
-</html>
+This library supports the following platforms:
 
-## Setup
-* Available on NuGet: [TouchView](http://www.nuget.org/packages/TouchView) [![NuGet](https://img.shields.io/nuget/v/TouchView.svg?label=NuGet)](https://www.nuget.org/packages/TouchView)
-* Add nuget package to your Xamarin.Forms .netStandard/PCL project and to your platform-specific projects (iOS and Android)
-* Add `TouchEffectPreserver.Preserve()` line to your AppDelegate and MainActivity (preserve from linker)
+| Platform     | Supported |
+| ------------ | --------- |
+| iOS          | ✅         |
+| Android      | ✅         |
+| Mac Catalyst | ❌         |
+| Windows      | ❌         |
+| Tizen        | ❌         |
 
-|Platform|Version|
-| ------------------- | ------------------- |
-|Xamarin.iOS|8.0+|
-|Xamarin.Android|15+|
-|Xamarin.Mac|All|
-|Xamarin.UWP|10+|
-|Tizen.NET|4.0+|
+Due to the temporary nature of this library, I will not be adding support for any platforms I do not personally need. I am open to PR's but MCT are aiming for a NET8 release of TouchEffect so this library will only be kicking around for a matter of weeks/months.
 
-##### Xamarin.UWP - Build on Release with .NET Native tool chain note
-````cs
-using System.Reflection;
-...
-var assembliesToInclude = new List<Assembly>
-{
-    typeof(PlatformTouchEff).GetTypeInfo().Assembly,
-    ...
-};
-Xamarin.Forms.Forms.Init(e, assembliesToInclude);
+## Install
 
-TouchEffectPreserver.Preserve();
-````
+- Install TouchEffect.Maui package
+- 
+ ```
+ Install-Package TouchEffect.Maui -Version 7.0.0-pre
+ ```
 
-## Samples
-The samples you can find here https://github.com/AndreiMisiukevich/TouchEffect/tree/master/TouchEffectSample
+- In your `MauiProgram.cs`, call `UseMauiTouchEffect`:
+  ```diff
+  var builder = MauiApp.CreateBuilder();
+          builder
+              .UseMauiApp<App>()
+  ++          .UseMauiTouchEffect()
+              .ConfigureFonts(fonts =>
+              {
+                  fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                  fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+              });
+  ```
 
-**XAML:** use TouchEff for achieving repsonsive UI (Changing background image or/and background color or/and opacity or/and scale).
+## Usage
 
-Use TouchEff attached properties for setting up touch visual effect.
+See the samples app from this project, it is a port of the `TouchEffectPage` from the XCT samples app.
+
+<img src="assets/Sample_Demonstration.gif" alt="Sample app included with this project" width="500">
+
 
 ```xaml
-...
-  xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
-...
-       <ContentView
-            touch:TouchEff.PressedAnimationDuration="800"
-            touch:TouchEff.RegularAnimationDuration="800"
-            touch:TouchEff.PressedScale="0.9"
-            touch:TouchEff.PressedOpacity="0.6"
-            touch:TouchEff.RippleCount="-1"
-            touch:TouchEff.Command="{Binding Command}">
-            
-            Padding="10, 5"
-            BackgroundColor="Black"
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="CenterAndExpand">
-            
-            <Label Text="CLICK ME" 
-                   TextColor="White" 
-                   FontSize="60"/>
-            
-        </ContentView>
-...
-       <StackLayout
-            touch:TouchEff.RegularBackgroundColor="Green"
-            touch:TouchEff.PressedBackgroundColor="Red"
-            touch:TouchEff.PressedScale="1.2"
-            touch:TouchEff.RippleCount="1"
-            touch:TouchEff.PressedRotation="10"
-            touch:TouchEff.PressedRotationX="15"
-            touch:TouchEff.PressedRotationY="15"
-            touch:TouchEff.PressedTranslationX="5"
-            touch:TouchEff.PressedTranslationY="5"
-            touch:TouchEff.PressedAnimationDuration="500"
-            touch:TouchEff.RegularAnimationDuration="500"
-            touch:TouchEff.Command="{Binding Command}">
-
-            Padding="10, 5"
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="CenterAndExpand">
-
-            <Label Text="CLICK ME" 
-                   TextColor="Black" 
-                   FontSize="60"/>
-        </StackLayout>
+<StackLayout
+    TouchEffect.AnimationDuration="250"
+    TouchEffect.AnimationEasing="{x:Static Easing.CubicInOut}"
+    TouchEffect.Command="{Binding Command, Source={x:Reference Page}}"
+    TouchEffect.PressedOpacity="0.6"
+    TouchEffect.PressedScale="0.8"
+    HorizontalOptions="CenterAndExpand"
+    Orientation="Horizontal">
+    <BoxView
+        HeightRequest="20"
+        WidthRequest="20"
+        Color="Gold" />
+    <Label Text="The entire layout receives touches" />
+    <BoxView
+        HeightRequest="20"
+        WidthRequest="20"
+        Color="Gold" />
+</StackLayout>
 ```
 
-If you wish to change Image Source on touch, you should use TouchImage control. It has several bindable properties for managing Pressed/Regular Source/Aspect of the image.
-
-```xaml
-...
-  xmlns:touch="clr-namespace:TouchEffect;assembly=TouchEffect"
-...
-       <touch:TouchImage
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="CenterAndExpand"
-            HeightRequest="250"
-            WidthRequest="250"
-            RegularBackgroundImageSource="button"
-            PressedBackgroundImageSource="button_pressed"
-            touch:TouchEff.Command="{Binding Command}"
-            />
-```
 
 ### TouchEff Attached Properties
 Property | Type | Default | Description
