@@ -24,7 +24,7 @@ Due to the temporary nature of this library, I will not be adding support for an
 - Install TouchEffect.Maui package
 - 
  ```
- Install-Package TouchEffect.Maui -Version 7.0.0-pre
+ Install-Package TouchEffect.Maui -Version 7.0.0
  ```
 
 - In your `MauiProgram.cs`, call `UseMauiTouchEffect`:
