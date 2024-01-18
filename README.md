@@ -1,5 +1,5 @@
 # Maui.TouchEffect
-Forked from the amazingly popular original TouchEffect Library, this Compat version aims to ease your migration from Xamarin.Forms to .NET MAUI with a compatible implementation to get you up and running without rewriting the parts of your app that relied on the original library.
+Im using the [@Axemasta code](https://github.com/Axemasta/Maui.TouchEffect) to bring this compat version in order to simplify Xamarin To Maui migrations
 
 Get it from NuGet:
 
