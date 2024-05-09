@@ -48,7 +48,6 @@ public partial class PlatformTouchEffect : PlatformEffect
 
     protected override void OnDetached()
     {
-        throw new NotImplementedException();
     }
     
     
